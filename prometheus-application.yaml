@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Devops-Techstack/prometheus-argocd # Replace with your Git repo URL
+    targetRevision: HEAD                               # Replace with the branch or tag, e.g., "main"
+    path: prometheus                                   # Path in the repository to the Prometheus chart
+    helm:
+      valueFiles:                                      # Optional, specify value files to use
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
